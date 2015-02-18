@@ -24,11 +24,13 @@ namespace BoxerXmlComparator
         private void LoadXmlOriginal_Click(object sender, EventArgs e)
         {
             OriginXml = LoadXmlDocument();
+            StatusBar.Text = "Wczytano plik 1";
         }
 
         private void LoadXMLCorrected_Click(object sender, EventArgs e)
         {
             CorrectedXml = LoadXmlDocument();
+            StatusBar.Text = "Wczytano plik 2";
         }
 
         private XmlDocument LoadXmlDocument()
@@ -38,6 +40,7 @@ namespace BoxerXmlComparator
             {
                 String path = openFileDialog1.FileName;
                 var xml1 = new XmlDocument();
+                xml1.XmlResolver = null;
                 xml1.Load(path);
                 return xml1;
             }
@@ -54,6 +57,7 @@ namespace BoxerXmlComparator
                 Comparator Comp = new Comparator();
                 Comp.Compare(OriginXml, CorrectedXml);
             }
+            StatusBar.Text = "Ukończono porównywanie!";
         }
 
         private bool CheckXml()
