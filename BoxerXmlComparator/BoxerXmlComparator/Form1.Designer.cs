@@ -87,6 +87,7 @@
             this.Show.TabIndex = 4;
             this.Show.Text = "Wyświetl";
             this.Show.UseVisualStyleBackColor = true;
+            this.Show.Click += new System.EventHandler(this.Show_Click);
             // 
             // openFileDialog1
             // 

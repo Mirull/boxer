@@ -14,7 +14,7 @@ namespace BoxerXmlComparator
 {
     public partial class Form1 : Form
     {
-        public XmlDocument CorrectedXml, OriginXml;
+        public XmlDocument CorrectedXml, OriginXml,ResultXml;
 
         public Form1()
         {
@@ -63,6 +63,12 @@ namespace BoxerXmlComparator
         private bool CheckXml()
         {
             return (CorrectedXml != null && OriginXml != null);
+        }
+
+        private void Show_Click(object sender, EventArgs e)
+        {
+            Form2 frm2 = new Form2();
+            frm2.Show();
         }
     }
 }
