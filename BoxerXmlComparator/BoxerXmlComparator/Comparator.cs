@@ -33,7 +33,7 @@ namespace BoxerXmlComparator
             var CorrectedTaggedTokensNode = CorrectedXml.SelectSingleNode("//taggedtokens");
             XmlNode rootNode = ResultDocument.CreateElement("changes");
             ResultDocument.AppendChild(rootNode);
-            int i = 0,j = 0;
+            int i = 0, j = 0, err_nr = 0;
             foreach(XmlNode tagTokenNode in OriginTaggedTokensNode)
             {
                     foreach(XmlNode node in tagTokenNode.FirstChild)
@@ -42,6 +42,29 @@ namespace BoxerXmlComparator
                         var correctedNode = CorrectedTaggedTokensNode.ChildNodes[i].FirstChild.ChildNodes[j];
                         if (node.OuterXml != correctedNode.OuterXml)
                         {
+                            err_nr = err_nr + 1;
+                            XmlNode changenode = ResultDocument.CreateElement("change");
+                            XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
+                            changenumber.Value = err_nr.ToString();
+                            changenode.Attributes.Append(changenumber);
+                            rootNode.AppendChild(changenode);
+
+
+                            XmlNode originalnode = ResultDocument.CreateElement("original");
+                            XmlAttribute attribute = ResultDocument.CreateAttribute("line");
+                            originalnode.InnerText = node.ParentNode.ParentNode.Name + " " + node.ParentNode.ParentNode.Attributes[0].Name + " "  + node.ParentNode.ParentNode.Attributes[0].Value + " " + node.OuterXml;
+                            changenode.AppendChild(originalnode);
+
+                            XmlNode correctednode = ResultDocument.CreateElement("corrected");
+                            correctednode.InnerText = correctedNode.ParentNode.ParentNode.Name + " " + correctedNode.ParentNode.ParentNode.Attributes[0].Name + " " + correctedNode.ParentNode.ParentNode.Attributes[0].Value + " " + correctedNode.OuterXml;
+                            changenode.AppendChild(correctednode);
+
+
+                            XmlNode pathnode = ResultDocument.CreateElement("path");
+                            pathnode.InnerText = GetXPathToNode(correctedNode) + " " + pathnode.OuterXml;
+                            changenode.AppendChild(pathnode);
+
+                            /*
                             XmlNode originalnode = ResultDocument.CreateElement("original");
                             XmlAttribute attribute = ResultDocument.CreateAttribute("line");
                             originalnode.InnerText = node.ParentNode.ParentNode.Name + " " + node.ParentNode.ParentNode.Attributes[0].Name + " "  + node.ParentNode.ParentNode.Attributes[0].Value + " " + node.OuterXml;
@@ -56,7 +79,7 @@ namespace BoxerXmlComparator
                             pathnode.InnerText = GetXPathToNode(correctedNode) + " " + pathnode.OuterXml;
                             rootNode.AppendChild(pathnode);
 
-
+                            */
                             MessageBox.Show("RIGHT: <" + node.ParentNode.ParentNode.Name + " " + node.ParentNode.ParentNode.Attributes[0].Name + "=" + node.ParentNode.ParentNode.Attributes[0].Value + ">" + node.OuterXml + "\nLEFT: <" + correctedNode.ParentNode.ParentNode.Name + " " + correctedNode.ParentNode.ParentNode.Attributes[0].Name + "=" + correctedNode.ParentNode.ParentNode.Attributes[0].Value + ">" + correctedNode.OuterXml);
                         }
                         j++;
