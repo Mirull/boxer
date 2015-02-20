@@ -31,14 +31,15 @@ namespace BoxerXmlComparator
         {
             var OriginTaggedTokensNode = OriginXml.SelectSingleNode("//taggedtokens");
             var CorrectedTaggedTokensNode = CorrectedXml.SelectSingleNode("//taggedtokens");
+            XmlNode baseNode = ResultDocument.CreateElement("DiffReport");
+            ResultDocument.AppendChild(baseNode);
             XmlNode rootNode = ResultDocument.CreateElement("changes");
-            ResultDocument.AppendChild(rootNode);
+            baseNode.AppendChild(rootNode);
             int i = 0, j = 0, err_nr = 0;
             foreach(XmlNode tagTokenNode in OriginTaggedTokensNode)
             {
                     foreach(XmlNode node in tagTokenNode.FirstChild)
                     {
-                       
                         var correctedNode = CorrectedTaggedTokensNode.ChildNodes[i].FirstChild.ChildNodes[j];
                         if (node.OuterXml != correctedNode.OuterXml)
                         {
@@ -112,13 +113,23 @@ namespace BoxerXmlComparator
                             rootNode.AppendChild(pathnode);
 
                             */
-                            MessageBox.Show("RIGHT: <" + node.ParentNode.ParentNode.Name + " " + node.ParentNode.ParentNode.Attributes[0].Name + "=" + node.ParentNode.ParentNode.Attributes[0].Value + ">" + node.OuterXml + "\nLEFT: <" + correctedNode.ParentNode.ParentNode.Name + " " + correctedNode.ParentNode.ParentNode.Attributes[0].Name + "=" + correctedNode.ParentNode.ParentNode.Attributes[0].Value + ">" + correctedNode.OuterXml);
+                            //MessageBox.Show("RIGHT: <" + node.ParentNode.ParentNode.Name + " " + node.ParentNode.ParentNode.Attributes[0].Name + "=" + node.ParentNode.ParentNode.Attributes[0].Value + ">" + node.OuterXml + "\nLEFT: <" + correctedNode.ParentNode.ParentNode.Name + " " + correctedNode.ParentNode.ParentNode.Attributes[0].Name + "=" + correctedNode.ParentNode.ParentNode.Attributes[0].Value + ">" + correctedNode.OuterXml);
                         }
                         j++;
                     }
                 i++;
                 j = 0;
             }
+            XmlNode errorpercentage = ResultDocument.CreateElement("statistics");
+            XmlAttribute wrongtag = ResultDocument.CreateAttribute("changed");
+            float percWT = ((float)err_nr / (float)i) * 100;
+            wrongtag.Value = Convert.ToString(percWT) + "%";
+            XmlAttribute removed = ResultDocument.CreateAttribute("removed");
+            float percR = (((float)i - (float)CorrectedTaggedTokensNode.ChildNodes.Count) * 100);
+            removed.Value = Convert.ToString(percR) + "%";
+            errorpercentage.Attributes.Append(wrongtag);
+            errorpercentage.Attributes.Append(removed);
+            baseNode.AppendChild(errorpercentage);
             ResultDocument.Save("test-doc.xml");
         }
 
