@@ -55,7 +55,7 @@ namespace BoxerXmlComparator
             else
             {
                 Comparator Comp = new Comparator();
-                Comp.Compare(OriginXml, CorrectedXml);
+                ResultXml = Comp.Compare(OriginXml, CorrectedXml);
             }
             StatusBar.Text = "Ukończono porównywanie!";
         }
