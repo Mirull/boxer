@@ -51,12 +51,44 @@ namespace BoxerXmlComparator
 
 
                             XmlNode originalnode = ResultDocument.CreateElement("original");
-                            XmlAttribute attribute = ResultDocument.CreateAttribute("line");
-                            originalnode.InnerText = node.ParentNode.ParentNode.Name + " " + node.ParentNode.ParentNode.Attributes[0].Name + " "  + node.ParentNode.ParentNode.Attributes[0].Value + " " + node.OuterXml;
+
+                            XmlAttribute nodename = ResultDocument.CreateAttribute("NodeName");
+                            nodename.Value = node.ParentNode.ParentNode.Name;
+
+                            XmlAttribute attribute = ResultDocument.CreateAttribute("AttributeName");
+                            attribute.Value = node.ParentNode.ParentNode.Attributes[0].Name;
+
+                            XmlAttribute attributevalue = ResultDocument.CreateAttribute("AttributeValue");
+                            attributevalue.Value = node.ParentNode.ParentNode.Attributes[0].Value;
+
+                            XmlAttribute outernode = ResultDocument.CreateAttribute("OuterXml");
+                            outernode.Value = node.OuterXml.ToString(); //tu cos kodowanie sie jebie. Obczaj ktos.
+
+                            originalnode.Attributes.Append(nodename);
+                            originalnode.Attributes.Append(attribute);
+                            originalnode.Attributes.Append(attributevalue);
+                            originalnode.Attributes.Append(outernode);
                             changenode.AppendChild(originalnode);
 
                             XmlNode correctednode = ResultDocument.CreateElement("corrected");
-                            correctednode.InnerText = correctedNode.ParentNode.ParentNode.Name + " " + correctedNode.ParentNode.ParentNode.Attributes[0].Name + " " + correctedNode.ParentNode.ParentNode.Attributes[0].Value + " " + correctedNode.OuterXml;
+
+                            nodename = ResultDocument.CreateAttribute("NodeName");
+                            nodename.Value = correctedNode.ParentNode.ParentNode.Name;
+
+                            attribute = ResultDocument.CreateAttribute("AttributeName");
+                            attribute.Value = correctedNode.ParentNode.ParentNode.Attributes[0].Name;
+
+                            attributevalue = ResultDocument.CreateAttribute("AttributeValue");
+                            attributevalue.Value = correctedNode.ParentNode.ParentNode.Attributes[0].Value;
+
+                            outernode = ResultDocument.CreateAttribute("OuterXml");
+                            outernode.Value = correctedNode.OuterXml.ToString(); //tu cos kodowanie sie jebie. Obczaj ktos.
+
+                            correctednode.Attributes.Append(nodename);
+                            correctednode.Attributes.Append(attribute);
+                            correctednode.Attributes.Append(attributevalue);
+                            correctednode.Attributes.Append(outernode);
+
                             changenode.AppendChild(correctednode);
 
 
