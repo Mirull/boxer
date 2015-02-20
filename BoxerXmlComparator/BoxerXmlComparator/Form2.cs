@@ -17,13 +17,13 @@ namespace BoxerXmlComparator
         public Form2()
         {
             InitializeComponent();
-            Form1 frm1 = new Form1();
-            webBrowser1.Url = new Uri(frm1.ResultXml.BaseURI);
+            //Form1 frm1 = new Form1();
+            //webBrowser1.Url = new Uri(frm1.ResultXml.BaseURI);
 
-            //string fileName = @"C:\data.xml";
-            //XmlDocument xmlDoc = new XmlDocument();
-            //xmlDoc.Load(fileName);
-            //webBrowser1.Url = new Uri(xmlDoc.BaseURI);
+            string fileName = "test-doc.xml";
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(fileName);
+            webBrowser1.Url = new Uri(xmlDoc.BaseURI);
         }
     }
 }
