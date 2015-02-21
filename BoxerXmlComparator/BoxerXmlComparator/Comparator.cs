@@ -34,10 +34,10 @@ namespace BoxerXmlComparator
 
             XmlNode baseNode = ResultDocument.CreateElement("DiffReport");
             ResultDocument.AppendChild(baseNode);
-            XmlNode rootNode = ResultDocument.CreateElement("changes");
-            baseNode.AppendChild(rootNode);
+            XmlNode changeNode = ResultDocument.CreateElement("changes");
+            baseNode.AppendChild(changeNode);
 
-            int i = 0, j = 0, err_nr = 0;
+            int i = 0, j = 0, err_nr_1 = 0;
 
             foreach(XmlNode tagTokenNode in OriginTaggedTokensNode)
             {
@@ -46,12 +46,12 @@ namespace BoxerXmlComparator
                         var correctedNode = CorrectedTaggedTokensNode.ChildNodes[i].FirstChild.ChildNodes[j];
                         if (node.OuterXml != correctedNode.OuterXml)
                         {
-                            err_nr = err_nr + 1;
+                            err_nr_1 = err_nr_1 + 1;
                             XmlNode changenode = ResultDocument.CreateElement("change");
                             XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
-                            changenumber.Value = err_nr.ToString();
+                            changenumber.Value = err_nr_1.ToString();
                             changenode.Attributes.Append(changenumber);
-                            rootNode.AppendChild(changenode);
+                            changeNode.AppendChild(changenode);
 
                             XmlNode originalnode = ResultDocument.CreateElement("original");
                             originalnode.InnerText = node.ParentNode.ParentNode.Name + " " + node.ParentNode.ParentNode.Attributes[0].Name + " " + node.ParentNode.ParentNode.Attributes[0].Value;
@@ -190,16 +190,48 @@ namespace BoxerXmlComparator
                 i++;
                 j = 0;
             }
+
+            //koncept, zobaczymy.
+
+            XmlNodeList OriginListDRS = OriginXml.SelectNodes("//merge/drs");
+            XmlNodeList CorrectedListDRS = CorrectedXml.SelectNodes("//merge/drs");
+            int m = 0, k = 0, err_nr_2 =0; 
+
+            foreach (XmlNode xn_drs in OriginListDRS)
+            {
+                XmlNodeList OriginListDRS_domain = OriginListDRS[m].SelectNodes("//domain/dr");
+                XmlNodeList CorrectedListDRS_domain = CorrectedListDRS[m].SelectNodes("//domain/dr");
+                
+                foreach (XmlNode xn_dr in OriginListDRS_domain)
+                {
+                    if (OriginListDRS_domain[k].OuterXml != CorrectedListDRS_domain[k].OuterXml)
+                    {
+                        err_nr_2++;
+                        XmlNode changenode = ResultDocument.CreateElement("change");
+                        XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
+                        changenumber.Value = err_nr_2.ToString();
+                        changenode.Attributes.Append(changenumber);
+                        changeNode.AppendChild(changenode);
+                        //ahahahahah.
+                    }
+                    k++;
+                }
+                m++;
+
+            }
+
             XmlNode errorpercentage = ResultDocument.CreateElement("statistics");
             XmlAttribute wrongtag = ResultDocument.CreateAttribute("changed");
-            float percWT = ((float)err_nr / (float)i) * 100;
+            float percWT = ((float)err_nr_1 / (float)i) * 100;
             wrongtag.Value = Convert.ToString(percWT) + "%";
-            XmlAttribute removed = ResultDocument.CreateAttribute("removed");
-            float percR = (((float)i - (float)CorrectedTaggedTokensNode.ChildNodes.Count) * 100);
-            removed.Value = Convert.ToString(percR) + "%";
+
+            //XmlAttribute removed = ResultDocument.CreateAttribute("removed");
+            //float percR = (((float)i - (float)CorrectedTaggedTokensNode.ChildNodes.Count) * 100);
+            //removed.Value = Convert.ToString(percR) + "%";
             errorpercentage.Attributes.Append(wrongtag);
-            errorpercentage.Attributes.Append(removed);
+            //errorpercentage.Attributes.Append(removed);
             baseNode.AppendChild(errorpercentage);
+
             ResultDocument.Save("test-doc.xml");
         }
 
