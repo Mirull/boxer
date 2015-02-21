@@ -31,11 +31,14 @@ namespace BoxerXmlComparator
         {
             var OriginTaggedTokensNode = OriginXml.SelectSingleNode("//taggedtokens");
             var CorrectedTaggedTokensNode = CorrectedXml.SelectSingleNode("//taggedtokens");
+
             XmlNode baseNode = ResultDocument.CreateElement("DiffReport");
             ResultDocument.AppendChild(baseNode);
             XmlNode rootNode = ResultDocument.CreateElement("changes");
             baseNode.AppendChild(rootNode);
+
             int i = 0, j = 0, err_nr = 0;
+
             foreach(XmlNode tagTokenNode in OriginTaggedTokensNode)
             {
                     foreach(XmlNode node in tagTokenNode.FirstChild)
@@ -50,9 +53,41 @@ namespace BoxerXmlComparator
                             changenode.Attributes.Append(changenumber);
                             rootNode.AppendChild(changenode);
 
-
                             XmlNode originalnode = ResultDocument.CreateElement("original");
+                            originalnode.InnerText = node.ParentNode.ParentNode.Name + " " + node.ParentNode.ParentNode.Attributes[0].Name + " " + node.ParentNode.ParentNode.Attributes[0].Value;
 
+                            XmlNode OriginalNodeTag0 = ResultDocument.CreateElement("tag");
+                            XmlAttribute OriginalTag0 = ResultDocument.CreateAttribute("type");
+
+                            OriginalTag0.Value = node.ParentNode.ChildNodes[0].Attributes[0].Value;
+                            OriginalNodeTag0.InnerText = node.ParentNode.ChildNodes[0].InnerText;
+                            OriginalNodeTag0.Attributes.Append(OriginalTag0);
+                            originalnode.AppendChild(OriginalNodeTag0);
+
+                            XmlNode OriginalNodeTag1 = ResultDocument.CreateElement("tag");
+                            XmlAttribute OriginalTag1 = ResultDocument.CreateAttribute("type");
+
+                            OriginalTag1.Value = node.ParentNode.ChildNodes[1].Attributes[0].Value;
+                            OriginalNodeTag1.InnerText = node.ParentNode.ChildNodes[1].InnerText;
+                            OriginalNodeTag1.Attributes.Append(OriginalTag1);
+                            originalnode.AppendChild(OriginalNodeTag1);
+
+                            XmlNode OriginalNodeTag2 = ResultDocument.CreateElement("tag");
+                            XmlAttribute OriginalTag2 = ResultDocument.CreateAttribute("type");
+
+                            OriginalTag2.Value = node.ParentNode.ChildNodes[2].Attributes[0].Value;
+                            OriginalNodeTag2.InnerText = node.ParentNode.ChildNodes[2].InnerText;
+                            OriginalNodeTag2.Attributes.Append(OriginalTag2);
+                            originalnode.AppendChild(OriginalNodeTag2);
+
+                            XmlNode OriginalNodeTag3 = ResultDocument.CreateElement("tag");
+                            XmlAttribute OriginalTag3 = ResultDocument.CreateAttribute("type");
+
+                            OriginalTag3.Value = node.ParentNode.ChildNodes[3].Attributes[0].Value;
+                            OriginalNodeTag3.InnerText = node.ParentNode.ChildNodes[3].InnerText;
+                            OriginalNodeTag3.Attributes.Append(OriginalTag3);
+                            originalnode.AppendChild(OriginalNodeTag3);
+                            /*
                             XmlAttribute nodename = ResultDocument.CreateAttribute("NodeName");
                             nodename.Value = node.ParentNode.ParentNode.Name;
 
@@ -69,27 +104,62 @@ namespace BoxerXmlComparator
                             originalnode.Attributes.Append(attribute);
                             originalnode.Attributes.Append(attributevalue);
                             originalnode.Attributes.Append(outernode);
+                            
+                            */
+
+                            
                             changenode.AppendChild(originalnode);
 
                             XmlNode correctednode = ResultDocument.CreateElement("corrected");
+                            correctednode.InnerText = correctedNode.ParentNode.ParentNode.Name + " " + correctedNode.ParentNode.ParentNode.Attributes[0].Name + " " + correctedNode.ParentNode.ParentNode.Attributes[0].Value;
 
-                            nodename = ResultDocument.CreateAttribute("NodeName");
+                            XmlNode CorrectedNodeTag0 = ResultDocument.CreateElement("tag");
+                            XmlAttribute CorrectedTag0 = ResultDocument.CreateAttribute("type");
+
+                            CorrectedTag0.Value = correctedNode.ParentNode.ChildNodes[0].Attributes[0].Value;
+                            CorrectedNodeTag0.InnerText = correctedNode.ParentNode.ChildNodes[0].InnerText;
+                            CorrectedNodeTag0.Attributes.Append(CorrectedTag0);
+                            correctednode.AppendChild(CorrectedNodeTag0);
+
+                            XmlNode CorrectedNodeTag1 = ResultDocument.CreateElement("tag");
+                            XmlAttribute CorrectedTag1 = ResultDocument.CreateAttribute("type");
+
+                            CorrectedTag1.Value = correctedNode.ParentNode.ChildNodes[1].Attributes[0].Value;
+                            CorrectedNodeTag1.InnerText = correctedNode.ParentNode.ChildNodes[1].InnerText;
+                            CorrectedNodeTag1.Attributes.Append(CorrectedTag1);
+                            correctednode.AppendChild(CorrectedNodeTag1);
+
+                            XmlNode CorrectedNodeTag2 = ResultDocument.CreateElement("tag");
+                            XmlAttribute CorrectedTag2 = ResultDocument.CreateAttribute("type");
+
+                            CorrectedTag2.Value = correctedNode.ParentNode.ChildNodes[2].Attributes[0].Value;
+                            CorrectedNodeTag2.InnerText = correctedNode.ParentNode.ChildNodes[2].InnerText;
+                            CorrectedNodeTag2.Attributes.Append(CorrectedTag2);
+                            correctednode.AppendChild(CorrectedNodeTag2);
+
+                            XmlNode CorrectedNodeTag3 = ResultDocument.CreateElement("tag");
+                            XmlAttribute CorrectedTag3 = ResultDocument.CreateAttribute("type");
+
+                            CorrectedTag3.Value = correctedNode.ParentNode.ChildNodes[3].Attributes[0].Value;
+                            CorrectedNodeTag3.InnerText = correctedNode.ParentNode.ChildNodes[3].InnerText;
+                            CorrectedNodeTag3.Attributes.Append(CorrectedTag3);
+                            correctednode.AppendChild(CorrectedNodeTag3);
+                            /*
+                            nodename = ResultDocument.CreateAttribute("NodeName"); //to inaczej sie nazwie
                             nodename.Value = correctedNode.ParentNode.ParentNode.Name;
 
-                            attribute = ResultDocument.CreateAttribute("AttributeName");
+                            attribute = ResultDocument.CreateAttribute("AttributeName"); //to inaczej sie nazwie
                             attribute.Value = correctedNode.ParentNode.ParentNode.Attributes[0].Name;
 
-                            attributevalue = ResultDocument.CreateAttribute("AttributeValue");
+                            attributevalue = ResultDocument.CreateAttribute("AttributeValue"); //to inaczej sie nazwie
                             attributevalue.Value = correctedNode.ParentNode.ParentNode.Attributes[0].Value;
-
-                            outernode = ResultDocument.CreateAttribute("OuterXml");
-                            outernode.Value = correctedNode.OuterXml.ToString(); //tu cos kodowanie sie jebie. Obczaj ktos.
 
                             correctednode.Attributes.Append(nodename);
                             correctednode.Attributes.Append(attribute);
                             correctednode.Attributes.Append(attributevalue);
                             correctednode.Attributes.Append(outernode);
-
+                            */
+                            
                             changenode.AppendChild(correctednode);
 
 
