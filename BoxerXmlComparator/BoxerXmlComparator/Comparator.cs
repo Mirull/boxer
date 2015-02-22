@@ -252,7 +252,6 @@ namespace BoxerXmlComparator
 
             XmlNode CondsNode = ResultDocument.CreateElement("Conds");
             changeNode.AppendChild(CondsNode);
-            //koncept, zobaczymy.
 
             XmlNodeList OriginListCONDS = OriginXml.SelectNodes("//merge/drs");
             XmlNodeList CorrectedListCONDS = CorrectedXml.SelectNodes("//merge/drs");
@@ -285,7 +284,7 @@ namespace BoxerXmlComparator
                         changenumber.Value = err_nr_3_removed.ToString();
 
                         changenode.AppendChild(changenode.OwnerDocument.ImportNode(xn_cond_original, true));
-                        DomainNode.AppendChild(changenode);
+                        CondsNode.AppendChild(changenode);
 
                         changenode.Attributes.Append(changenumber);
                     }
@@ -315,7 +314,7 @@ namespace BoxerXmlComparator
                         changenumber.Value = err_nr_3_add.ToString();
 
                         changenode.AppendChild(changenode.OwnerDocument.ImportNode(xn_cond_corrected, true));
-                        DomainNode.AppendChild(changenode);
+                        CondsNode.AppendChild(changenode);
 
                         changenode.Attributes.Append(changenumber);
 
@@ -350,7 +349,7 @@ namespace BoxerXmlComparator
                                 changenode.AppendChild(originalnode);
                                 changenode.AppendChild(correctednode);
 
-                                DomainNode.AppendChild(changenode);
+                                CondsNode.AppendChild(changenode);
 
                                 changenode.Attributes.Append(changenumber);
                             }
