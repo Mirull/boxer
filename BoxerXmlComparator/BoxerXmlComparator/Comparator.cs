@@ -226,7 +226,7 @@ namespace BoxerXmlComparator
                     if (not_found == true) //nie znaleziono pasującego
                     {
                         err_nr_2++;
-                        XmlNode changenode = ResultDocument.CreateElement("remove");
+                        XmlNode changenode = ResultDocument.CreateElement("removed");
                         XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
                         changenumber.Value = err_nr_2.ToString();
                         changenode.Attributes.Append(changenumber);
@@ -239,6 +239,8 @@ namespace BoxerXmlComparator
                         //nico
                     }
                 }
+
+                //szukanie dodań
                 foreach (XmlNode xn_dr_corrected in CorrectedListDRS_domain)
                 {
                     Boolean not_found = true;
@@ -264,6 +266,36 @@ namespace BoxerXmlComparator
                     else
                     {
                         //nico
+                    }
+                }
+
+                //szukanie zmian
+                foreach (XmlNode xn_dr_original in OriginListDRS_domain)
+                {
+                    foreach (XmlNode xn_dr_corrected in CorrectedListDRS_domain)
+                    {
+                        if (xn_dr_corrected.Attributes[1].Value == xn_dr_original.Attributes[1].Value)
+                        {
+                            if (xn_dr_original.OuterXml != xn_dr_corrected.OuterXml)
+                            {
+                                XmlNode changenode = ResultDocument.CreateElement("changed");
+                                XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
+                                changenumber.Value = err_nr_2.ToString();
+
+
+
+                                XmlNode originalnode = ResultDocument.CreateElement("original");
+                                originalnode.InnerText = xn_dr_original.Name + " " + xn_dr_original.Attributes[0].Name + " " + xn_dr_original.Attributes[0].Value + " " + xn_dr_original.Attributes[1].Name + " " + xn_dr_original.Attributes[1].Value;
+                                XmlNode correctednode = ResultDocument.CreateElement("corrected");
+                                correctednode.InnerText = xn_dr_corrected.Name + " " + xn_dr_corrected.Attributes[0].Name + " " + xn_dr_corrected.Attributes[0].Value + " " + xn_dr_corrected.Attributes[1].Name + " " + xn_dr_corrected.Attributes[1].Value;
+
+                                changenode.AppendChild(originalnode);
+                                changenode.AppendChild(correctednode);
+
+                                MergeNode.AppendChild(changenode);
+                            }
+                            break;
+                        }
                     }
                 }
             }
