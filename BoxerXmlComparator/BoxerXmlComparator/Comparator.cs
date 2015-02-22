@@ -153,7 +153,7 @@ namespace BoxerXmlComparator
                 }
             }
 
-            TagTokenNode.AppendChild(AppendResultNode((err_add_count / base_1), (err_removed_count / base_1), (err_changed_count / base_1), ((err_add_count + err_removed_count + err_changed_count) / base_1)));   
+            TagTokenNode.AppendChild(AppendResultNode(err_add_count, err_removed_count, err_changed_count, base_1));
 
             err_add_count = err_removed_count = err_changed_count = 0;
 
@@ -263,7 +263,7 @@ namespace BoxerXmlComparator
                 }
             }
 
-            DomainNode.AppendChild(AppendResultNode((err_add_count / base_2), (err_removed_count / base_2), (err_changed_count / base_2), ((err_add_count + err_removed_count + err_changed_count) / base_2)));
+            DomainNode.AppendChild(AppendResultNode(err_add_count, err_removed_count, err_changed_count, base_2));
 
             err_add_count = err_removed_count = err_changed_count = 0;
 
@@ -407,7 +407,7 @@ namespace BoxerXmlComparator
             }
 
 
-            CondsNode.AppendChild(AppendResultNode((err_add_count / base_3), (err_removed_count / base_3), (err_changed_count / base_3),((err_add_count + err_removed_count + err_changed_count)/base_3)));
+            CondsNode.AppendChild(AppendResultNode(err_add_count, err_removed_count, err_changed_count, base_3));
 
             err_add_count = err_removed_count = err_changed_count = 0;
 
@@ -477,25 +477,31 @@ namespace BoxerXmlComparator
             ResultDocument.Save("test-doc.xml");
         }
 
-        private XmlNode CreateResultNode(string name, float percent)
+        private XmlNode CreateResultNode(string name, float count, float all_nodes)
         {
             XmlNode ChildResultNode = ResultDocument.CreateElement(name);
             XmlAttribute PercentAttr = ResultDocument.CreateAttribute("percent");
+            XmlAttribute AllNodesAttr = ResultDocument.CreateAttribute("all_nodes");
+            XmlAttribute WrongNodesAttr = ResultDocument.CreateAttribute("wrong_nodes");
 
-            PercentAttr.Value = Math.Round((decimal)(percent*100), 3).ToString();
+            PercentAttr.Value = Math.Round((decimal)((count / all_nodes) * 100), 3).ToString();
+            AllNodesAttr.Value = all_nodes.ToString();
+            WrongNodesAttr.Value = count.ToString();
 
             ChildResultNode.Attributes.Append(PercentAttr);
+            ChildResultNode.Attributes.Append(AllNodesAttr);
+            ChildResultNode.Attributes.Append(WrongNodesAttr);
 
             return ChildResultNode;
         }
 
-        private XmlNode AppendResultNode(float add_p, float remove_p, float change_p, float all_p)
+        private XmlNode AppendResultNode(float add_p, float remove_p, float change_p, int all_nodes)
         {
             XmlNode ResultNode = ResultDocument.CreateElement("Result");
-            ResultNode.AppendChild(CreateResultNode("added_error", add_p));
-            ResultNode.AppendChild(CreateResultNode("removed_error", remove_p));
-            ResultNode.AppendChild(CreateResultNode("changed_error", change_p));
-            ResultNode.AppendChild(CreateResultNode("all_error", all_p));
+            ResultNode.AppendChild(CreateResultNode("added_error", add_p, all_nodes));
+            ResultNode.AppendChild(CreateResultNode("removed_error", remove_p, all_nodes));
+            ResultNode.AppendChild(CreateResultNode("changed_error", change_p, all_nodes));
+            ResultNode.AppendChild(CreateResultNode("all_error", (add_p + remove_p + change_p), all_nodes));
 
             return ResultNode;
         }
