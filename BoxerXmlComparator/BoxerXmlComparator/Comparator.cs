@@ -402,6 +402,7 @@ namespace BoxerXmlComparator
             ResultDocument.Save("test-doc.xml");
         }
 
+
         private string GetAttributeValue(XmlNode xNode, string attributeToFind1, string attributeToFind2)
         {
             string returnValue = "";

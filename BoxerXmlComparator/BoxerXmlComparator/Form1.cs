@@ -23,22 +23,23 @@ namespace BoxerXmlComparator
 
         private void LoadXmlOriginal_Click(object sender, EventArgs e)
         {
-            OriginXml = LoadXmlDocument();
+            OriginXml = LoadXmlDocument(this.NameFileOriginal);
             StatusBar.Text = "Wczytano plik 1";
         }
 
         private void LoadXMLCorrected_Click(object sender, EventArgs e)
         {
-            CorrectedXml = LoadXmlDocument();
+            CorrectedXml = LoadXmlDocument(this.NameFileCorrected);
             StatusBar.Text = "Wczytano plik 2";
         }
 
-        private XmlDocument LoadXmlDocument()
+        private XmlDocument LoadXmlDocument(Label lab)
         {
             openFileDialog1.Filter = "xml files (*.xml)|*.xml";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 String path = openFileDialog1.FileName;
+                lab.Text = path;
                 var xml1 = new XmlDocument();
                 xml1.XmlResolver = null;
                 xml1.Load(path);
