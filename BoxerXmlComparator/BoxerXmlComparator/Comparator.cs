@@ -257,7 +257,7 @@ namespace BoxerXmlComparator
             XmlNodeList CorrectedListCONDS = CorrectedXml.SelectNodes("//merge/drs/conds");
             int err_nr_3_add = 0, err_nr_3_removed = 0, err_nr_3_changed = 0;
 
-            for(int l = 0; l < OriginListDRS.Count; l++)
+            for (int l = 0; l < OriginListCONDS.Count; l++)
             {
                 XmlNodeList OriginListCONDS_cond = OriginListCONDS[l].SelectNodes("cond");
                 XmlNodeList CorrectedListCONDS_cond = CorrectedListCONDS[l].SelectNodes("cond");
@@ -334,24 +334,44 @@ namespace BoxerXmlComparator
                         {
                             if (xn_cond_original.OuterXml != xn_cond_corrected.OuterXml)
                             {
-                                err_nr_3_changed++;
-                                XmlNode changenode = ResultDocument.CreateElement("changed");
-                                XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
-                                changenumber.Value = err_nr_3_changed.ToString();
+                                Boolean not_found = true;
+                                foreach (XmlNode confirm in OriginListCONDS_cond)
+                                {
+                                    if (xn_cond_corrected.OuterXml == confirm.OuterXml)
+                                    {
+                                        not_found = false; 
+                                        break;
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+                                if (not_found == true)
+                                {
+                                    err_nr_3_changed++;
+                                    XmlNode changenode = ResultDocument.CreateElement("changed");
+                                    XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
+                                    changenumber.Value = err_nr_3_changed.ToString();
 
 
 
-                                XmlNode originalnode = ResultDocument.CreateElement("original");
-                                originalnode.AppendChild(originalnode.OwnerDocument.ImportNode(xn_cond_original, true));
-                                XmlNode correctednode = ResultDocument.CreateElement("corrected");
-                                correctednode.AppendChild(correctednode.OwnerDocument.ImportNode(xn_cond_corrected, true));
-                                changenode.Attributes.Append(changenumber);
-                                changenode.AppendChild(originalnode);
-                                changenode.AppendChild(correctednode);
+                                    XmlNode originalnode = ResultDocument.CreateElement("original");
+                                    originalnode.AppendChild(originalnode.OwnerDocument.ImportNode(xn_cond_original, true));
+                                    XmlNode correctednode = ResultDocument.CreateElement("corrected");
+                                    correctednode.AppendChild(correctednode.OwnerDocument.ImportNode(xn_cond_corrected, true));
+                                    changenode.Attributes.Append(changenumber);
+                                    changenode.AppendChild(originalnode);
+                                    changenode.AppendChild(correctednode);
 
-                                CondsNode.AppendChild(changenode);
+                                    CondsNode.AppendChild(changenode);
 
-                                changenode.Attributes.Append(changenumber);
+                                    changenode.Attributes.Append(changenumber);
+                                }
+                                else
+                                {
+
+                                }
                             }
                             break;
                         }
