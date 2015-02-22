@@ -88,8 +88,13 @@ namespace BoxerXmlComparator
 
         private void Show_Click(object sender, EventArgs e)
         {
-            Form2 frm2 = new Form2();
-            frm2.Show();
+            if (this.ResultXml == null)
+                MessageBox.Show("Brak pliku wynikowego.");
+            else
+            {
+                Form2 frm2 = new Form2(this.ResultXml);
+                frm2.Show();
+            }
         }
 
         private void Save_Click(object sender, EventArgs e)

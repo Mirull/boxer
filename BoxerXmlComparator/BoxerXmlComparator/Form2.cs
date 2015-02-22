@@ -9,21 +9,37 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Schema;
+using System.IO;
 
 namespace BoxerXmlComparator
 {
     public partial class Form2 : Form
     {
-        public Form2()
+        private String localXMLFileName = "localXML.xml";
+
+        public Form2(XmlDocument XML)
         {
             InitializeComponent();
-            //Form1 frm1 = new Form1();
-            //webBrowser1.Url = new Uri(frm1.ResultXml.BaseURI);
 
-            string fileName = "test-doc.xml";
+            XML.Save(localXMLFileName);
+           
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(fileName);
+            xmlDoc.Load(localXMLFileName);
             webBrowser1.Url = new Uri(xmlDoc.BaseURI);
+             
         }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+
+            if (File.Exists(localXMLFileName))
+                File.Delete(localXMLFileName);
+
+            base.Dispose(disposing);
+        }     
+
     }
 }
