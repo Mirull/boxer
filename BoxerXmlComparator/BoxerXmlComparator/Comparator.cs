@@ -251,7 +251,7 @@ namespace BoxerXmlComparator
 
 
             XmlNode CondsNode = ResultDocument.CreateElement("Conds");
-            changeNode.AppendChild(DomainNode);
+            changeNode.AppendChild(CondsNode);
             //koncept, zobaczymy.
 
             XmlNodeList OriginListCONDS = OriginXml.SelectNodes("//merge/drs");
