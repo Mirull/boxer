@@ -29,126 +29,123 @@ namespace BoxerXmlComparator
         
         private void CompareTaggedTokens(XmlDocument OriginXml, XmlDocument CorrectedXml, XmlDocument ResultDocument)
         {
-            var OriginTaggedTokensNode = OriginXml.SelectSingleNode("//taggedtokens");
-            var CorrectedTaggedTokensNode = CorrectedXml.SelectSingleNode("//taggedtokens");
+          //  var OriginTaggedTokensNode = OriginXml.SelectSingleNode("//taggedtokens");
+          //  var CorrectedTaggedTokensNode = CorrectedXml.SelectSingleNode("//taggedtokens");
 
             XmlNode baseNode = ResultDocument.CreateElement("DiffReport");
             ResultDocument.AppendChild(baseNode);
             XmlNode changeNode = ResultDocument.CreateElement("changes");
             baseNode.AppendChild(changeNode);
             XmlNode TagTokenNode = ResultDocument.CreateElement("TagToken");
-            changeNode.AppendChild(TagTokenNode);
-            int i = 0, j = 0, err_nr_1 = 0;
+            changeNode.AppendChild(TagTokenNode);       
 
-            foreach(XmlNode tagTokenNode in OriginTaggedTokensNode)
+            XmlNodeList OriginListTAGGED = OriginXml.SelectNodes("//taggedtokens");
+            XmlNodeList CorrectedListTAGGGED = CorrectedXml.SelectNodes("//taggedtokens");
+            int err_nr_1_add = 0, err_nr_1_removed = 0, err_nr_1_changed = 0;
+
+            for (int l = 0; l < OriginListTAGGED.Count; l++)
             {
-                    foreach(XmlNode node in tagTokenNode.FirstChild)
+                XmlNodeList OriginListTAGEED_token = OriginListTAGGED[l].SelectNodes("//tagtoken");
+                XmlNodeList CorrectedListTAGGGED_token = CorrectedListTAGGGED[l].SelectNodes("//tagtoken");
+
+
+                //szukanie usunięń
+                foreach (XmlNode xn_tag_original in OriginListTAGEED_token)
+                {
+                    Boolean not_found = true;
+                    foreach (XmlNode xn_tag_corrected in CorrectedListTAGGGED_token)
                     {
-                        var correctedNode = CorrectedTaggedTokensNode.ChildNodes[i].FirstChild.ChildNodes[j];
-                        if (node.OuterXml != correctedNode.OuterXml)
+                        if (xn_tag_original.Attributes[0].Value == xn_tag_corrected.Attributes[0].Value)
                         {
-                            err_nr_1++;
-                            XmlNode changenode = ResultDocument.CreateElement("change");
-                            XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
-                            changenumber.Value = err_nr_1.ToString();
-                            changenode.Attributes.Append(changenumber);
-                            TagTokenNode.AppendChild(changenode);
-
-                            XmlNode originalnode = ResultDocument.CreateElement("original");
-                            originalnode.InnerText = node.ParentNode.ParentNode.Name + " " + node.ParentNode.ParentNode.Attributes[0].Name + " " + node.ParentNode.ParentNode.Attributes[0].Value;
-
-                            XmlNode OriginalNodeTag0 = ResultDocument.CreateElement("tag");
-                            XmlAttribute OriginalTag0 = ResultDocument.CreateAttribute("type");
-
-                            OriginalTag0.Value = node.ParentNode.ChildNodes[0].Attributes[0].Value;
-                            OriginalNodeTag0.InnerText = node.ParentNode.ChildNodes[0].InnerText;
-                            OriginalNodeTag0.Attributes.Append(OriginalTag0);
-                            originalnode.AppendChild(OriginalNodeTag0);
-
-                            XmlNode OriginalNodeTag1 = ResultDocument.CreateElement("tag");
-                            XmlAttribute OriginalTag1 = ResultDocument.CreateAttribute("type");
-
-                            OriginalTag1.Value = node.ParentNode.ChildNodes[1].Attributes[0].Value;
-                            OriginalNodeTag1.InnerText = node.ParentNode.ChildNodes[1].InnerText;
-                            OriginalNodeTag1.Attributes.Append(OriginalTag1);
-                            originalnode.AppendChild(OriginalNodeTag1);
-
-                            XmlNode OriginalNodeTag2 = ResultDocument.CreateElement("tag");
-                            XmlAttribute OriginalTag2 = ResultDocument.CreateAttribute("type");
-
-                            OriginalTag2.Value = node.ParentNode.ChildNodes[2].Attributes[0].Value;
-                            OriginalNodeTag2.InnerText = node.ParentNode.ChildNodes[2].InnerText;
-                            OriginalNodeTag2.Attributes.Append(OriginalTag2);
-                            originalnode.AppendChild(OriginalNodeTag2);
-
-                            XmlNode OriginalNodeTag3 = ResultDocument.CreateElement("tag");
-                            XmlAttribute OriginalTag3 = ResultDocument.CreateAttribute("type");
-
-                            OriginalTag3.Value = node.ParentNode.ChildNodes[3].Attributes[0].Value;
-                            OriginalNodeTag3.InnerText = node.ParentNode.ChildNodes[3].InnerText;
-                            OriginalNodeTag3.Attributes.Append(OriginalTag3);
-                            originalnode.AppendChild(OriginalNodeTag3);
-                    
-                            changenode.AppendChild(originalnode);
-
-                            XmlNode correctednode = ResultDocument.CreateElement("corrected");
-                            correctednode.InnerText = correctedNode.ParentNode.ParentNode.Name + " " + correctedNode.ParentNode.ParentNode.Attributes[0].Name + " " + correctedNode.ParentNode.ParentNode.Attributes[0].Value;
-
-                            XmlNode CorrectedNodeTag0 = ResultDocument.CreateElement("tag");
-                            XmlAttribute CorrectedTag0 = ResultDocument.CreateAttribute("type");
-
-                            CorrectedTag0.Value = correctedNode.ParentNode.ChildNodes[0].Attributes[0].Value;
-                            CorrectedNodeTag0.InnerText = correctedNode.ParentNode.ChildNodes[0].InnerText;
-                            CorrectedNodeTag0.Attributes.Append(CorrectedTag0);
-                            correctednode.AppendChild(CorrectedNodeTag0);
-
-                            XmlNode CorrectedNodeTag1 = ResultDocument.CreateElement("tag");
-                            XmlAttribute CorrectedTag1 = ResultDocument.CreateAttribute("type");
-
-                            CorrectedTag1.Value = correctedNode.ParentNode.ChildNodes[1].Attributes[0].Value;
-                            CorrectedNodeTag1.InnerText = correctedNode.ParentNode.ChildNodes[1].InnerText;
-                            CorrectedNodeTag1.Attributes.Append(CorrectedTag1);
-                            correctednode.AppendChild(CorrectedNodeTag1);
-
-                            XmlNode CorrectedNodeTag2 = ResultDocument.CreateElement("tag");
-                            XmlAttribute CorrectedTag2 = ResultDocument.CreateAttribute("type");
-
-                            CorrectedTag2.Value = correctedNode.ParentNode.ChildNodes[2].Attributes[0].Value;
-                            CorrectedNodeTag2.InnerText = correctedNode.ParentNode.ChildNodes[2].InnerText;
-                            CorrectedNodeTag2.Attributes.Append(CorrectedTag2);
-                            correctednode.AppendChild(CorrectedNodeTag2);
-
-                            XmlNode CorrectedNodeTag3 = ResultDocument.CreateElement("tag");
-                            XmlAttribute CorrectedTag3 = ResultDocument.CreateAttribute("type");
-
-                            CorrectedTag3.Value = correctedNode.ParentNode.ChildNodes[3].Attributes[0].Value;
-                            CorrectedNodeTag3.InnerText = correctedNode.ParentNode.ChildNodes[3].InnerText;
-                            CorrectedNodeTag3.Attributes.Append(CorrectedTag3);
-                            correctednode.AppendChild(CorrectedNodeTag3);
-                            
-                            
-                            changenode.AppendChild(correctednode);
-
-
-                            XmlNode pathnode = ResultDocument.CreateElement("path");
-                            pathnode.InnerText = GetXPathToNode(correctedNode) + " " + pathnode.OuterXml;
-                            changenode.AppendChild(pathnode);
-
+                            not_found = false;
+                            break;
                         }
-                        j++;
                     }
-                i++;
-                j = 0;
-            }
+                    if (not_found == true) //nie znaleziono pasującego
+                    {
+                        err_nr_1_removed++;
+                        XmlNode changenode = ResultDocument.CreateElement("removed");
+                        XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
+                        changenumber.Value = err_nr_1_removed.ToString();                    
+                        changenode.AppendChild(changenode.OwnerDocument.ImportNode(xn_tag_original, true));
+                        TagTokenNode.AppendChild(changenode);
 
+                        changenode.Attributes.Append(changenumber);
+
+                    }
+                    else
+                    {
+                        //nico
+                    }
+                }
+
+                //szukanie dodań
+                foreach (XmlNode xn_tag_corrected in CorrectedListTAGGGED_token)
+                {
+                    Boolean not_found = true;
+                    foreach (XmlNode xn_tag_original in OriginListTAGEED_token)
+                    {
+                        if (xn_tag_corrected.Attributes[0].Value == xn_tag_original.Attributes[0].Value)
+                        {
+                            not_found = false;
+                            break;
+                        }
+                    }
+                    if (not_found == true) //nie znaleziono pasującego
+                    {
+                        err_nr_1_add++;
+                        XmlNode changenode = ResultDocument.CreateElement("added");
+                        XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
+                        changenumber.Value = err_nr_1_add.ToString();
+                        changenode.AppendChild(changenode.OwnerDocument.ImportNode(xn_tag_corrected, true));
+                        TagTokenNode.AppendChild(changenode);
+
+                        changenode.Attributes.Append(changenumber);
+                    }
+                    else
+                    {
+                        //nico
+                    }
+                }
+
+                //szukanie zmian
+                foreach (XmlNode xn_tag_original in OriginListTAGEED_token)
+                {
+                    foreach (XmlNode xn_tag_corrected in CorrectedListTAGGGED_token)
+                    {
+                        if (xn_tag_corrected.Attributes[0].Value == xn_tag_original.Attributes[0].Value)
+                        {
+                            if (xn_tag_original.OuterXml != xn_tag_corrected.OuterXml)
+                            {
+                                err_nr_1_changed++;
+                                XmlNode changenode = ResultDocument.CreateElement("changed");
+                                XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
+                                changenumber.Value = err_nr_1_changed.ToString();
+
+                                XmlNode originalnode = ResultDocument.CreateElement("original");
+                                originalnode.AppendChild(originalnode.OwnerDocument.ImportNode(xn_tag_original, true));
+                                XmlNode correctednode = ResultDocument.CreateElement("corrected");
+                                correctednode.AppendChild(correctednode.OwnerDocument.ImportNode(xn_tag_corrected, true));
+
+                                changenode.AppendChild(originalnode);
+                                changenode.AppendChild(correctednode);
+
+                                TagTokenNode.AppendChild(changenode);
+
+                                changenode.Attributes.Append(changenumber);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
 
             XmlNode DomainNode = ResultDocument.CreateElement("Domain");
             changeNode.AppendChild(DomainNode);
-            //koncept, zobaczymy.
 
             XmlNodeList OriginListDRS = OriginXml.SelectNodes("//merge/drs");
             XmlNodeList CorrectedListDRS = CorrectedXml.SelectNodes("//merge/drs");
-            int err_nr_2 = 0; 
+            int err_nr_2_add = 0, err_nr_2_removed = 0, err_nr_2_changed = 0;
 
 
 
@@ -174,14 +171,14 @@ namespace BoxerXmlComparator
                     }
                     if (not_found == true) //nie znaleziono pasującego
                     {
-                        err_nr_2++;
+                        err_nr_2_removed++;
                         XmlNode changenode = ResultDocument.CreateElement("removed");
                         XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
-                        changenumber.Value = err_nr_2.ToString();
-                        changenode.Attributes.Append(changenumber);
+                        changenumber.Value = err_nr_2_removed.ToString();
                         changenode.AppendChild(changenode.OwnerDocument.ImportNode(xn_dr_original, true));
                         DomainNode.AppendChild(changenode);
-                        
+
+                        changenode.Attributes.Append(changenumber);
                     }
                     else
                     {
@@ -203,13 +200,15 @@ namespace BoxerXmlComparator
                     }
                     if (not_found == true) //nie znaleziono pasującego
                     {
-                        err_nr_2++;
+                        err_nr_2_add++;
                         XmlNode changenode = ResultDocument.CreateElement("added");
                         XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
-                        changenumber.Value = err_nr_2.ToString();
+                        changenumber.Value = err_nr_2_add.ToString();
+
                         changenode.AppendChild(changenode.OwnerDocument.ImportNode(xn_dr_corrected, true));
                         DomainNode.AppendChild(changenode);
 
+                        changenode.Attributes.Append(changenumber);
                     }
                     else
                     {
@@ -226,9 +225,10 @@ namespace BoxerXmlComparator
                         {
                             if (xn_dr_original.OuterXml != xn_dr_corrected.OuterXml)
                             {
+                                err_nr_2_changed++;
                                 XmlNode changenode = ResultDocument.CreateElement("changed");
                                 XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
-                                changenumber.Value = err_nr_2.ToString();
+                                changenumber.Value = err_nr_2_changed.ToString();
 
                                 XmlNode originalnode = ResultDocument.CreateElement("original");
                                 originalnode.AppendChild(originalnode.OwnerDocument.ImportNode(xn_dr_original, true));
@@ -239,6 +239,8 @@ namespace BoxerXmlComparator
                                 changenode.AppendChild(correctednode);
 
                                 DomainNode.AppendChild(changenode);
+
+                                changenode.Attributes.Append(changenumber);
                             }
                             break;
                         }
@@ -252,7 +254,7 @@ namespace BoxerXmlComparator
 
             XmlNodeList OriginListCONDS = OriginXml.SelectNodes("//merge/drs");
             XmlNodeList CorrectedListCONDS = CorrectedXml.SelectNodes("//merge/drs");
-            int err_nr_3 = 0; 
+            int err_nr_3_add = 0, err_nr_3_removed = 0, err_nr_3_changed = 0;
 
             for(int l = 0; l < OriginListDRS.Count; l++)
             {
@@ -266,7 +268,7 @@ namespace BoxerXmlComparator
                     Boolean not_found = true;
                     foreach (XmlNode xn_cond_corrected in CorrectedListCONDS_cond)
                     {
-                        if (xn_cond_corrected.Attributes[0].Value == xn_cond_original.Attributes[0].Value)
+                        if (xn_cond_corrected.FirstChild.Attributes[1].Value == xn_cond_original.FirstChild.Attributes[1].Value)
                         {
                             not_found = false;
                             break;
@@ -274,14 +276,15 @@ namespace BoxerXmlComparator
                     }
                     if (not_found == true) //nie znaleziono pasującego
                     {
-                        err_nr_3++;
+                        err_nr_3_removed++;
                         XmlNode changenode = ResultDocument.CreateElement("removed");
                         XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
-                        changenumber.Value = err_nr_2.ToString();
-                        changenode.Attributes.Append(changenumber);
+                        changenumber.Value = err_nr_3_removed.ToString();
+
                         changenode.AppendChild(changenode.OwnerDocument.ImportNode(xn_cond_original, true));
                         DomainNode.AppendChild(changenode);
-                        
+
+                        changenode.Attributes.Append(changenumber);
                     }
                     else
                     {
@@ -295,7 +298,7 @@ namespace BoxerXmlComparator
                     Boolean not_found = true;
                     foreach (XmlNode xn_cond_original in OriginListCONDS_cond)
                     {
-                        if (xn_cond_corrected.Attributes[0].Value == xn_cond_original.Attributes[0].Value)
+                        if (xn_cond_corrected.FirstChild.Attributes[1].Value == xn_cond_original.FirstChild.Attributes[1].Value)
                         {
                             not_found = false;
                             break;
@@ -303,13 +306,15 @@ namespace BoxerXmlComparator
                     }
                     if (not_found == true) //nie znaleziono pasującego
                     {
-                        err_nr_2++;
+                        err_nr_3_add++;
                         XmlNode changenode = ResultDocument.CreateElement("added");
                         XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
-                        changenumber.Value = err_nr_2.ToString();
-                        changenode.Attributes.Append(changenumber);
+                        changenumber.Value = err_nr_3_add.ToString();
+
                         changenode.AppendChild(changenode.OwnerDocument.ImportNode(xn_cond_corrected, true));
                         DomainNode.AppendChild(changenode);
+
+                        changenode.Attributes.Append(changenumber);
 
                     }
                     else
@@ -323,13 +328,14 @@ namespace BoxerXmlComparator
                 {
                     foreach (XmlNode xn_cond_corrected in CorrectedListCONDS_cond)
                     {
-                        if (xn_cond_corrected.Attributes[0].Value == xn_cond_original.Attributes[0].Value)
+                        if (xn_cond_corrected.Attributes[1].Value == xn_cond_original.Attributes[1].Value)
                         {
                             if (xn_cond_original.OuterXml != xn_cond_corrected.OuterXml)
                             {
+                                err_nr_3_changed++;
                                 XmlNode changenode = ResultDocument.CreateElement("changed");
                                 XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
-                                changenumber.Value = err_nr_2.ToString();
+                                changenumber.Value = err_nr_3_changed.ToString();
 
 
 
@@ -337,11 +343,13 @@ namespace BoxerXmlComparator
                                 originalnode.AppendChild(originalnode.OwnerDocument.ImportNode(xn_cond_original, true));
                                 XmlNode correctednode = ResultDocument.CreateElement("corrected");
                                 correctednode.AppendChild(correctednode.OwnerDocument.ImportNode(xn_cond_corrected, true));
-
+                                changenode.Attributes.Append(changenumber);
                                 changenode.AppendChild(originalnode);
                                 changenode.AppendChild(correctednode);
 
                                 DomainNode.AppendChild(changenode);
+
+                                changenode.Attributes.Append(changenumber);
                             }
                             break;
                         }
@@ -351,17 +359,17 @@ namespace BoxerXmlComparator
 
 
             
-            XmlNode errorpercentage = ResultDocument.CreateElement("statistics");
-            XmlAttribute wrongtag = ResultDocument.CreateAttribute("changed");
-            float percWT = ((float)err_nr_1 / (float)i) * 100;
-            wrongtag.Value = Convert.ToString(percWT) + "%";
+          //  XmlNode errorpercentage = ResultDocument.CreateElement("statistics");
+          //  XmlAttribute wrongtag = ResultDocument.CreateAttribute("changed");
+          //  float percWT = ((float)err_nr_1 / (float)i) * 100;
+         //   wrongtag.Value = Convert.ToString(percWT) + "%";
 
             //XmlAttribute removed = ResultDocument.CreateAttribute("removed");
             //float percR = (((float)i - (float)CorrectedTaggedTokensNode.ChildNodes.Count) * 100);
             //removed.Value = Convert.ToString(percR) + "%";
-            errorpercentage.Attributes.Append(wrongtag);
+            //errorpercentage.Attributes.Append(wrongtag);
             //errorpercentage.Attributes.Append(removed);
-            baseNode.AppendChild(errorpercentage);
+            //baseNode.AppendChild(errorpercentage);
 
             ResultDocument.Save("test-doc.xml");
         }
