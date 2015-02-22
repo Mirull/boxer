@@ -36,7 +36,8 @@ namespace BoxerXmlComparator
             ResultDocument.AppendChild(baseNode);
             XmlNode changeNode = ResultDocument.CreateElement("changes");
             baseNode.AppendChild(changeNode);
-
+            XmlNode TagTokenNode = ResultDocument.CreateElement("TagToken");
+            changeNode.AppendChild(TagTokenNode);
             int i = 0, j = 0, err_nr_1 = 0;
 
             foreach(XmlNode tagTokenNode in OriginTaggedTokensNode)
@@ -46,12 +47,12 @@ namespace BoxerXmlComparator
                         var correctedNode = CorrectedTaggedTokensNode.ChildNodes[i].FirstChild.ChildNodes[j];
                         if (node.OuterXml != correctedNode.OuterXml)
                         {
-                            err_nr_1 = err_nr_1 + 1;
+                            err_nr_1++;
                             XmlNode changenode = ResultDocument.CreateElement("change");
                             XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
                             changenumber.Value = err_nr_1.ToString();
                             changenode.Attributes.Append(changenumber);
-                            changeNode.AppendChild(changenode);
+                            TagTokenNode.AppendChild(changenode);
 
                             XmlNode originalnode = ResultDocument.CreateElement("original");
                             originalnode.InnerText = node.ParentNode.ParentNode.Name + " " + node.ParentNode.ParentNode.Attributes[0].Name + " " + node.ParentNode.ParentNode.Attributes[0].Value;
@@ -191,35 +192,82 @@ namespace BoxerXmlComparator
                 j = 0;
             }
 
+
+            XmlNode MergeNode = ResultDocument.CreateElement("Merge");
+            changeNode.AppendChild(MergeNode);
             //koncept, zobaczymy.
 
             XmlNodeList OriginListDRS = OriginXml.SelectNodes("//merge/drs");
             XmlNodeList CorrectedListDRS = CorrectedXml.SelectNodes("//merge/drs");
-            int m = 0, k = 0, err_nr_2 =0; 
+            int m = 0, k = 0, err_nr_2 = 0; 
 
-            foreach (XmlNode xn_drs in OriginListDRS)
+
+
+
+            
+            for(int l = 0; l < OriginListDRS.Count; l++)
             {
-                XmlNodeList OriginListDRS_domain = OriginListDRS[m].SelectNodes("//domain/dr");
-                XmlNodeList CorrectedListDRS_domain = CorrectedListDRS[m].SelectNodes("//domain/dr");
-                
-                foreach (XmlNode xn_dr in OriginListDRS_domain)
+                XmlNodeList OriginListDRS_domain = OriginListDRS[l].SelectNodes("//domain/dr");
+                XmlNodeList CorrectedListDRS_domain = CorrectedListDRS[l].SelectNodes("//domain/dr");
+
+
+                //szukanie usunięń
+                foreach (XmlNode xn_dr_original in OriginListDRS_domain)
                 {
-                    if (OriginListDRS_domain[k].OuterXml != CorrectedListDRS_domain[k].OuterXml)
+                    Boolean not_found = true;
+                    foreach (XmlNode xn_dr_corrected in CorrectedListDRS_domain)
+                    {
+                        if (xn_dr_corrected.Attributes[1].Value == xn_dr_original.Attributes[1].Value)
+                        {
+                            not_found = false;
+                            break;
+                        }
+                    }
+                    if (not_found == true) //nie znaleziono pasującego
                     {
                         err_nr_2++;
-                        XmlNode changenode = ResultDocument.CreateElement("change");
+                        XmlNode changenode = ResultDocument.CreateElement("remove");
                         XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
                         changenumber.Value = err_nr_2.ToString();
                         changenode.Attributes.Append(changenumber);
-                        changeNode.AppendChild(changenode);
-                        //ahahahahah.
+                        changenode.InnerText = xn_dr_original.Name + " " + xn_dr_original.Attributes[0].Name + " " + xn_dr_original.Attributes[0].Value + " " + xn_dr_original.Attributes[1].Name + " " + xn_dr_original.Attributes[1].Value;
+                        MergeNode.AppendChild(changenode);
+                        
                     }
-                    k++;
+                    else
+                    {
+                        //nico
+                    }
                 }
-                m++;
+                foreach (XmlNode xn_dr_corrected in CorrectedListDRS_domain)
+                {
+                    Boolean not_found = true;
+                    foreach (XmlNode xn_dr_original in OriginListDRS_domain)
+                    {
+                        if (xn_dr_corrected.Attributes[1].Value == xn_dr_original.Attributes[1].Value)
+                        {
+                            not_found = false;
+                            break;
+                        }
+                    }
+                    if (not_found == true) //nie znaleziono pasującego
+                    {
+                        err_nr_2++;
+                        XmlNode changenode = ResultDocument.CreateElement("added");
+                        XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
+                        changenumber.Value = err_nr_2.ToString();
+                        changenode.Attributes.Append(changenumber);
+                        changenode.InnerText = xn_dr_corrected.Name + " " + xn_dr_corrected.Attributes[0].Name + " " + xn_dr_corrected.Attributes[0].Value + " " + xn_dr_corrected.Attributes[1].Name + " " + xn_dr_corrected.Attributes[1].Value;
+                        MergeNode.AppendChild(changenode);
 
+                    }
+                    else
+                    {
+                        //nico
+                    }
+                }
             }
-
+            
             XmlNode errorpercentage = ResultDocument.CreateElement("statistics");
             XmlAttribute wrongtag = ResultDocument.CreateAttribute("changed");
             float percWT = ((float)err_nr_1 / (float)i) * 100;
