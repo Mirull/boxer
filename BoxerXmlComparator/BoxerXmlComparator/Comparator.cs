@@ -42,7 +42,11 @@ namespace BoxerXmlComparator
             XmlNodeList OriginListTAGGED = OriginXml.SelectNodes("//taggedtokens");
             XmlNodeList CorrectedListTAGGGED = CorrectedXml.SelectNodes("//taggedtokens");
             int err_nr_1_add = 0, err_nr_1_removed = 0, err_nr_1_changed = 0;
+            
+            // Zmienne dla obliczania procentu błędu
             int base_1 = 0;
+            float err_add_count = 0, err_removed_count = 0, err_changed_count = 0;
+
 
             for (int l = 0; l < OriginListTAGGED.Count; l++)
             {
@@ -74,12 +78,15 @@ namespace BoxerXmlComparator
 
                         changenode.Attributes.Append(changenumber);
 
+                        err_removed_count++;
                     }
                     else
                     {
                         //nico
                     }
                 }
+
+                
 
                 //szukanie dodań
                 foreach (XmlNode xn_tag_corrected in CorrectedListTAGGGED_token)
@@ -103,6 +110,8 @@ namespace BoxerXmlComparator
                         TagTokenNode.AppendChild(changenode);
 
                         changenode.Attributes.Append(changenumber);
+
+                        err_add_count++;
                     }
                     else
                     {
@@ -135,12 +144,18 @@ namespace BoxerXmlComparator
                                 TagTokenNode.AppendChild(changenode);
 
                                 changenode.Attributes.Append(changenumber);
+
+                                err_changed_count++;
                             }
                             break;
                         }
                     }
                 }
             }
+
+            TagTokenNode.AppendChild(AppendResultNode((err_add_count / base_1), (err_removed_count / base_1), (err_changed_count / base_1), ((err_add_count + err_removed_count + err_changed_count) / base_1)));   
+
+            err_add_count = err_removed_count = err_changed_count = 0;
 
             XmlNode DomainNode = ResultDocument.CreateElement("Domain");
             changeNode.AppendChild(DomainNode);
@@ -149,10 +164,6 @@ namespace BoxerXmlComparator
             XmlNodeList CorrectedListDRS = CorrectedXml.SelectNodes("//merge/drs/domain");
             int err_nr_2_add = 0, err_nr_2_removed = 0, err_nr_2_changed = 0;
             int base_2 = 0;
-
-
-
-
             
             for(int l = 0; l < OriginListDRS.Count; l++)
             {
@@ -251,8 +262,13 @@ namespace BoxerXmlComparator
                     }
                 }
             }
-            
 
+            DomainNode.AppendChild(AppendResultNode((err_add_count / base_2), (err_removed_count / base_2), (err_changed_count / base_2), ((err_add_count + err_removed_count + err_changed_count) / base_2)));
+
+            err_add_count = err_removed_count = err_changed_count = 0;
+
+
+            
 
             XmlNode CondsNode = ResultDocument.CreateElement("Conds");
             changeNode.AppendChild(CondsNode);
@@ -293,6 +309,8 @@ namespace BoxerXmlComparator
                         CondsNode.AppendChild(changenode);
 
                         changenode.Attributes.Append(changenumber);
+
+                        err_removed_count++;
                     }
                     else
                     {
@@ -324,6 +342,7 @@ namespace BoxerXmlComparator
 
                         changenode.Attributes.Append(changenumber);
 
+                        err_add_count++;
                     }
                     else
                     {
@@ -373,6 +392,8 @@ namespace BoxerXmlComparator
                                     CondsNode.AppendChild(changenode);
 
                                     changenode.Attributes.Append(changenumber);
+
+                                    err_changed_count++;
                                 }
                                 else
                                 {
@@ -385,6 +406,10 @@ namespace BoxerXmlComparator
                 }
             }
 
+
+            CondsNode.AppendChild(AppendResultNode((err_add_count / base_3), (err_removed_count / base_3), (err_changed_count / base_3),((err_add_count + err_removed_count + err_changed_count)/base_3)));
+
+            err_add_count = err_removed_count = err_changed_count = 0;
 
             
             XmlNode errorpercentage = ResultDocument.CreateElement("error");
@@ -452,6 +477,28 @@ namespace BoxerXmlComparator
             ResultDocument.Save("test-doc.xml");
         }
 
+        private XmlNode CreateResultNode(string name, float percent)
+        {
+            XmlNode ChildResultNode = ResultDocument.CreateElement(name);
+            XmlAttribute PercentAttr = ResultDocument.CreateAttribute("percent");
+
+            PercentAttr.Value = Math.Round((decimal)percent, 3).ToString();
+
+            ChildResultNode.Attributes.Append(PercentAttr);
+
+            return ChildResultNode;
+        }
+
+        private XmlNode AppendResultNode(float add_p, float remove_p, float change_p, float all_p)
+        {
+            XmlNode ResultNode = ResultDocument.CreateElement("Result");
+            ResultNode.AppendChild(CreateResultNode("added_error", add_p));
+            ResultNode.AppendChild(CreateResultNode("removed_error", remove_p));
+            ResultNode.AppendChild(CreateResultNode("changed_error", change_p));
+            ResultNode.AppendChild(CreateResultNode("all_error", all_p));
+
+            return ResultNode;
+        }
 
         private string GetAttributeValue(XmlNode xNode, string attributeToFind1, string attributeToFind2)
         {
