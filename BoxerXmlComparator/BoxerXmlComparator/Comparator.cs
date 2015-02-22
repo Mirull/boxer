@@ -247,6 +247,8 @@ namespace BoxerXmlComparator
                     }
                 }
             }
+            
+
 
             XmlNode CondsNode = ResultDocument.CreateElement("Conds");
             changeNode.AppendChild(DomainNode);
@@ -268,7 +270,8 @@ namespace BoxerXmlComparator
                     Boolean not_found = true;
                     foreach (XmlNode xn_cond_corrected in CorrectedListCONDS_cond)
                     {
-                        if (xn_cond_corrected.FirstChild.Attributes[1].Value == xn_cond_original.FirstChild.Attributes[1].Value)
+
+                        if ((GetAttributeValue(xn_cond_corrected.FirstChild, "arg1", "arg")) == (GetAttributeValue(xn_cond_original.FirstChild, "arg1", "arg")) && xn_cond_corrected.FirstChild.Name == xn_cond_original.FirstChild.Name)
                         {
                             not_found = false;
                             break;
@@ -298,7 +301,7 @@ namespace BoxerXmlComparator
                     Boolean not_found = true;
                     foreach (XmlNode xn_cond_original in OriginListCONDS_cond)
                     {
-                        if (xn_cond_corrected.FirstChild.Attributes[1].Value == xn_cond_original.FirstChild.Attributes[1].Value)
+                        if ((GetAttributeValue(xn_cond_corrected.FirstChild, "arg1", "arg")) == (GetAttributeValue(xn_cond_original.FirstChild, "arg1", "arg")) && xn_cond_corrected.FirstChild.Name == xn_cond_original.FirstChild.Name)
                         {
                             not_found = false;
                             break;
@@ -328,7 +331,7 @@ namespace BoxerXmlComparator
                 {
                     foreach (XmlNode xn_cond_corrected in CorrectedListCONDS_cond)
                     {
-                        if (xn_cond_corrected.Attributes[1].Value == xn_cond_original.Attributes[1].Value)
+                        if ((GetAttributeValue(xn_cond_corrected.FirstChild, "arg1", "arg")) == (GetAttributeValue(xn_cond_original.FirstChild, "arg1", "arg")) && xn_cond_corrected.FirstChild.Name == xn_cond_original.FirstChild.Name)
                         {
                             if (xn_cond_original.OuterXml != xn_cond_corrected.OuterXml)
                             {
@@ -372,6 +375,21 @@ namespace BoxerXmlComparator
             //baseNode.AppendChild(errorpercentage);
 
             ResultDocument.Save("test-doc.xml");
+        }
+
+        private string GetAttributeValue(XmlNode xNode, string attributeToFind1, string attributeToFind2)
+        {
+            string returnValue = "";
+            XmlElement ele = xNode as XmlElement;
+
+            if (ele.HasAttribute(attributeToFind1) == true)
+                returnValue = ele.GetAttribute(attributeToFind1);
+            else if (ele.HasAttribute(attributeToFind2) == true )
+                returnValue = ele.GetAttribute(attributeToFind2);
+            else
+                returnValue = ele.Name;
+
+            return returnValue;
         }
 
         private void CompareSection(XmlNode sectionOriginal, XmlNode sectionCorrected)
