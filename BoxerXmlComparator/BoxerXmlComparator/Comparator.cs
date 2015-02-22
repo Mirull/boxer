@@ -143,8 +143,8 @@ namespace BoxerXmlComparator
             XmlNode DomainNode = ResultDocument.CreateElement("Domain");
             changeNode.AppendChild(DomainNode);
 
-            XmlNodeList OriginListDRS = OriginXml.SelectNodes("//merge/drs");
-            XmlNodeList CorrectedListDRS = CorrectedXml.SelectNodes("//merge/drs");
+            XmlNodeList OriginListDRS = OriginXml.SelectNodes("//merge/drs/domain");
+            XmlNodeList CorrectedListDRS = CorrectedXml.SelectNodes("//merge/drs/domain");
             int err_nr_2_add = 0, err_nr_2_removed = 0, err_nr_2_changed = 0;
 
 
@@ -153,8 +153,8 @@ namespace BoxerXmlComparator
             
             for(int l = 0; l < OriginListDRS.Count; l++)
             {
-                XmlNodeList OriginListDRS_domain = OriginListDRS[l].SelectNodes("//domain/dr");
-                XmlNodeList CorrectedListDRS_domain = CorrectedListDRS[l].SelectNodes("//domain/dr");
+                XmlNodeList OriginListDRS_domain = OriginListDRS[l].SelectNodes("dr");
+                XmlNodeList CorrectedListDRS_domain = CorrectedListDRS[l].SelectNodes("dr");
 
 
                 //szukanie usunięń
@@ -253,14 +253,14 @@ namespace BoxerXmlComparator
             XmlNode CondsNode = ResultDocument.CreateElement("Conds");
             changeNode.AppendChild(CondsNode);
 
-            XmlNodeList OriginListCONDS = OriginXml.SelectNodes("//merge/drs");
-            XmlNodeList CorrectedListCONDS = CorrectedXml.SelectNodes("//merge/drs");
+            XmlNodeList OriginListCONDS = OriginXml.SelectNodes("//merge/drs/conds");
+            XmlNodeList CorrectedListCONDS = CorrectedXml.SelectNodes("//merge/drs/conds");
             int err_nr_3_add = 0, err_nr_3_removed = 0, err_nr_3_changed = 0;
 
             for(int l = 0; l < OriginListDRS.Count; l++)
             {
-                XmlNodeList OriginListCONDS_cond = OriginListCONDS[l].SelectNodes("//conds/cond");
-                XmlNodeList CorrectedListCONDS_cond = CorrectedListCONDS[l].SelectNodes("//conds/cond");
+                XmlNodeList OriginListCONDS_cond = OriginListCONDS[l].SelectNodes("cond");
+                XmlNodeList CorrectedListCONDS_cond = CorrectedListCONDS[l].SelectNodes("cond");
 
 
                 //szukanie usunięń
