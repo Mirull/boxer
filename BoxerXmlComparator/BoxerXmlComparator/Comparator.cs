@@ -387,17 +387,67 @@ namespace BoxerXmlComparator
 
 
             
-          //  XmlNode errorpercentage = ResultDocument.CreateElement("statistics");
-          //  XmlAttribute wrongtag = ResultDocument.CreateAttribute("changed");
-          //  float percWT = ((float)err_nr_1 / (float)i) * 100;
-         //   wrongtag.Value = Convert.ToString(percWT) + "%";
+            XmlNode errorpercentage = ResultDocument.CreateElement("error");
+            XmlNode errortagtoken = ResultDocument.CreateElement("TagToken");
+            XmlNode errortdomain = ResultDocument.CreateElement("Domain");
+            XmlNode errorconds = ResultDocument.CreateElement("Conds");
 
-            //XmlAttribute removed = ResultDocument.CreateAttribute("removed");
-            //float percR = (((float)i - (float)CorrectedTaggedTokensNode.ChildNodes.Count) * 100);
-            //removed.Value = Convert.ToString(percR) + "%";
-            //errorpercentage.Attributes.Append(wrongtag);
-            //errorpercentage.Attributes.Append(removed);
-            //baseNode.AppendChild(errorpercentage);
+            XmlNode errortagtokenAdded = ResultDocument.CreateElement("Added");
+            XmlNode errortagtokenRemoved = ResultDocument.CreateElement("Removed");
+            XmlNode errortagtokenChanged = ResultDocument.CreateElement("Changed");
+
+            XmlNode errortdomainAdded = ResultDocument.CreateElement("Added");
+            XmlNode errortdomainRemoved = ResultDocument.CreateElement("Removed");
+            XmlNode errortdomainChanged = ResultDocument.CreateElement("Changed");
+
+            XmlNode errorcondsAdded = ResultDocument.CreateElement("Added");
+            XmlNode errorcondsRemoved = ResultDocument.CreateElement("Removed");
+            XmlNode errorcondsChanged = ResultDocument.CreateElement("Changed");
+
+            float erroradded = 0;
+            float errorremoved = 0;
+            float errorchanged = 0;
+
+            baseNode.AppendChild(errorpercentage);
+            errorpercentage.AppendChild(errortagtoken);
+            errorpercentage.AppendChild(errortdomain);
+            errorpercentage.AppendChild(errorconds);
+
+            errortagtoken.AppendChild(errortagtokenAdded);
+            errortagtoken.AppendChild(errortagtokenRemoved);
+            errortagtoken.AppendChild(errortagtokenChanged);
+
+            errortdomain.AppendChild(errortdomainAdded);
+            errortdomain.AppendChild(errortdomainRemoved);
+            errortdomain.AppendChild(errortdomainChanged);
+
+            errorconds.AppendChild(errorcondsAdded);
+            errorconds.AppendChild(errorcondsRemoved);
+            errorconds.AppendChild(errorcondsChanged);
+
+            erroradded = ((float)err_nr_1_add / (float)base_1) * 100;
+            errorremoved = ((float)err_nr_1_removed / (float)base_1) * 100;
+            errorchanged = ((float)err_nr_1_changed / (float)base_1) * 100;
+
+            errortagtokenAdded.InnerText = erroradded + "%";
+            errortagtokenRemoved.InnerText = errorremoved + "%";
+            errortagtokenChanged.InnerText = errorchanged + "%";
+
+            erroradded = ((float)err_nr_2_add / (float)base_2) * 100;
+            errorremoved = ((float)err_nr_2_removed / (float)base_2) * 100;
+            errorchanged = ((float)err_nr_2_changed / (float)base_2) * 100;
+
+            errortdomainAdded.InnerText = erroradded + "%";
+            errortdomainRemoved.InnerText = errorremoved + "%";
+            errortdomainChanged.InnerText = errorchanged + "%";
+
+            erroradded = ((float)err_nr_3_add / (float)base_3) * 100;
+            errorremoved = ((float)err_nr_3_removed / (float)base_3) * 100;
+            errorchanged = ((float)err_nr_3_changed / (float)base_3) * 100;
+
+            errorcondsAdded.InnerText = erroradded + "%";
+            errorcondsRemoved.InnerText = errorremoved + "%";
+            errorcondsChanged.InnerText = errorchanged + "%";
 
             ResultDocument.Save("test-doc.xml");
         }
