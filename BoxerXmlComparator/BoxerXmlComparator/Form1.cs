@@ -48,10 +48,31 @@ namespace BoxerXmlComparator
                 return null;            
         }
 
+        private void SaveXmlDocument()
+        {
+            XmlDocument saveDocument = new XmlDocument();
+            saveDocument.Load("test-doc.xml");
+
+            saveFileDialog1.Filter = "xml files (*.xml)|*.xml";
+            saveFileDialog1.FilterIndex = 0;
+            saveFileDialog1.RestoreDirectory = true;
+            saveFileDialog1.CreatePrompt = true;
+            saveFileDialog1.FileName = null;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                saveDocument.Save(saveFileDialog1.FileName);
+            }
+            else
+            {
+                StatusBar.Text = "Błąd zapisu";
+            }
+        }
+
         private void Compare_Click(object sender, EventArgs e)
         {
             if (!CheckXml())
-                MessageBox.Show("Brak XML");
+                StatusBar.Text = "Brak XML";
             else
             {
                 Comparator Comp = new Comparator();
@@ -69,6 +90,11 @@ namespace BoxerXmlComparator
         {
             Form2 frm2 = new Form2();
             frm2.Show();
+        }
+
+        private void Save_Click(object sender, EventArgs e)
+        {
+            SaveXmlDocument();
         }
     }
 }

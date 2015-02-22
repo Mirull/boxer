@@ -78,6 +78,7 @@
             this.Save.TabIndex = 3;
             this.Save.Text = "Zapisz";
             this.Save.UseVisualStyleBackColor = true;
+            this.Save.Click += new System.EventHandler(this.Save_Click);
             // 
             // Show
             // 
