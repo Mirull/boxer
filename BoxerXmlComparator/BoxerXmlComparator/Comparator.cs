@@ -42,12 +42,14 @@ namespace BoxerXmlComparator
             XmlNodeList OriginListTAGGED = OriginXml.SelectNodes("//taggedtokens");
             XmlNodeList CorrectedListTAGGGED = CorrectedXml.SelectNodes("//taggedtokens");
             int err_nr_1_add = 0, err_nr_1_removed = 0, err_nr_1_changed = 0;
+            int base_1 = 0;
 
             for (int l = 0; l < OriginListTAGGED.Count; l++)
             {
                 XmlNodeList OriginListTAGEED_token = OriginListTAGGED[l].SelectNodes("//tagtoken");
                 XmlNodeList CorrectedListTAGGGED_token = CorrectedListTAGGGED[l].SelectNodes("//tagtoken");
 
+                base_1 = OriginListTAGEED_token.Count;
 
                 //szukanie usunięń
                 foreach (XmlNode xn_tag_original in OriginListTAGEED_token)
@@ -146,6 +148,7 @@ namespace BoxerXmlComparator
             XmlNodeList OriginListDRS = OriginXml.SelectNodes("//merge/drs/domain");
             XmlNodeList CorrectedListDRS = CorrectedXml.SelectNodes("//merge/drs/domain");
             int err_nr_2_add = 0, err_nr_2_removed = 0, err_nr_2_changed = 0;
+            int base_2 = 0;
 
 
 
@@ -156,6 +159,7 @@ namespace BoxerXmlComparator
                 XmlNodeList OriginListDRS_domain = OriginListDRS[l].SelectNodes("dr");
                 XmlNodeList CorrectedListDRS_domain = CorrectedListDRS[l].SelectNodes("dr");
 
+                base_2 = CorrectedListDRS_domain.Count;
 
                 //szukanie usunięń
                 foreach (XmlNode xn_dr_original in OriginListDRS_domain)
@@ -256,12 +260,14 @@ namespace BoxerXmlComparator
             XmlNodeList OriginListCONDS = OriginXml.SelectNodes("//merge/drs/conds");
             XmlNodeList CorrectedListCONDS = CorrectedXml.SelectNodes("//merge/drs/conds");
             int err_nr_3_add = 0, err_nr_3_removed = 0, err_nr_3_changed = 0;
+            int base_3 = 0;
 
             for (int l = 0; l < OriginListCONDS.Count; l++)
             {
                 XmlNodeList OriginListCONDS_cond = OriginListCONDS[l].SelectNodes("cond");
                 XmlNodeList CorrectedListCONDS_cond = CorrectedListCONDS[l].SelectNodes("cond");
 
+                base_3 = OriginListCONDS_cond.Count;
 
                 //szukanie usunięń
                 foreach (XmlNode xn_cond_original in OriginListCONDS_cond)
