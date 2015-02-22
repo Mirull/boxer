@@ -482,7 +482,7 @@ namespace BoxerXmlComparator
             XmlNode ChildResultNode = ResultDocument.CreateElement(name);
             XmlAttribute PercentAttr = ResultDocument.CreateAttribute("percent");
 
-            PercentAttr.Value = Math.Round((decimal)percent, 3).ToString();
+            PercentAttr.Value = Math.Round((decimal)(percent*100), 3).ToString();
 
             ChildResultNode.Attributes.Append(PercentAttr);
 
