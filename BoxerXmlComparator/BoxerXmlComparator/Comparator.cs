@@ -179,7 +179,7 @@ namespace BoxerXmlComparator
                         XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
                         changenumber.Value = err_nr_2.ToString();
                         changenode.Attributes.Append(changenumber);
-                        changenode.InnerText = xn_dr_original.Name + " " + xn_dr_original.Attributes[0].Name + " " + xn_dr_original.Attributes[0].Value + " " + xn_dr_original.Attributes[1].Name + " " + xn_dr_original.Attributes[1].Value;
+                        changenode.AppendChild(changenode.OwnerDocument.ImportNode(xn_dr_original, true));
                         DomainNode.AppendChild(changenode);
                         
                     }
@@ -207,8 +207,7 @@ namespace BoxerXmlComparator
                         XmlNode changenode = ResultDocument.CreateElement("added");
                         XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
                         changenumber.Value = err_nr_2.ToString();
-                        changenode.Attributes.Append(changenumber);
-                        changenode.InnerText = xn_dr_corrected.Name + " " + xn_dr_corrected.Attributes[0].Name + " " + xn_dr_corrected.Attributes[0].Value + " " + xn_dr_corrected.Attributes[1].Name + " " + xn_dr_corrected.Attributes[1].Value;
+                        changenode.AppendChild(changenode.OwnerDocument.ImportNode(xn_dr_corrected, true));
                         DomainNode.AppendChild(changenode);
 
                     }
@@ -231,12 +230,10 @@ namespace BoxerXmlComparator
                                 XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
                                 changenumber.Value = err_nr_2.ToString();
 
-
-
                                 XmlNode originalnode = ResultDocument.CreateElement("original");
-                                originalnode.InnerText = xn_dr_original.Name + " " + xn_dr_original.Attributes[0].Name + " " + xn_dr_original.Attributes[0].Value + " " + xn_dr_original.Attributes[1].Name + " " + xn_dr_original.Attributes[1].Value;
+                                originalnode.AppendChild(originalnode.OwnerDocument.ImportNode(xn_dr_original, true));
                                 XmlNode correctednode = ResultDocument.CreateElement("corrected");
-                                correctednode.InnerText = xn_dr_corrected.Name + " " + xn_dr_corrected.Attributes[0].Name + " " + xn_dr_corrected.Attributes[0].Value + " " + xn_dr_corrected.Attributes[1].Name + " " + xn_dr_corrected.Attributes[1].Value;
+                                correctednode.AppendChild(correctednode.OwnerDocument.ImportNode(xn_dr_corrected, true));
 
                                 changenode.AppendChild(originalnode);
                                 changenode.AppendChild(correctednode);
@@ -282,7 +279,7 @@ namespace BoxerXmlComparator
                         XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
                         changenumber.Value = err_nr_2.ToString();
                         changenode.Attributes.Append(changenumber);
-                        changenode.InnerText = xn_cond_original.Name + " " + xn_cond_original.Attributes[0].Name + " " + xn_cond_original.Attributes[0].Value;
+                        changenode.AppendChild(changenode.OwnerDocument.ImportNode(xn_cond_original, true));
                         DomainNode.AppendChild(changenode);
                         
                     }
@@ -311,7 +308,7 @@ namespace BoxerXmlComparator
                         XmlAttribute changenumber = ResultDocument.CreateAttribute("number");
                         changenumber.Value = err_nr_2.ToString();
                         changenode.Attributes.Append(changenumber);
-                        changenode.InnerText = xn_cond_corrected.Name + " " + xn_cond_corrected.Attributes[0].Name + " " + xn_cond_corrected.Attributes[0].Value;
+                        changenode.AppendChild(changenode.OwnerDocument.ImportNode(xn_cond_corrected, true));
                         DomainNode.AppendChild(changenode);
 
                     }
@@ -337,9 +334,9 @@ namespace BoxerXmlComparator
 
 
                                 XmlNode originalnode = ResultDocument.CreateElement("original");
-                                originalnode.InnerText = xn_cond_original.Name + " " + xn_cond_original.Attributes[0].Name + " " + xn_cond_original.Attributes[0].Value;
+                                originalnode.AppendChild(originalnode.OwnerDocument.ImportNode(xn_cond_original, true));
                                 XmlNode correctednode = ResultDocument.CreateElement("corrected");
-                                correctednode.InnerText = xn_cond_corrected.Name + " " + xn_cond_corrected.Attributes[0].Name + " " + xn_cond_corrected.Attributes[0].Value;
+                                correctednode.AppendChild(correctednode.OwnerDocument.ImportNode(xn_cond_corrected, true));
 
                                 changenode.AppendChild(originalnode);
                                 changenode.AppendChild(correctednode);
