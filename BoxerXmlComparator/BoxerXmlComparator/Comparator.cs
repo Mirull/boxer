@@ -51,7 +51,6 @@ namespace BoxerXmlComparator
                             correctednode.InnerText = correctedNode.ParentNode.ParentNode.Name + " " + correctedNode.ParentNode.ParentNode.Attributes[0].Name + " " + correctedNode.ParentNode.ParentNode.Attributes[0].Value + " " + correctedNode.OuterXml;
                             rootNode.AppendChild(correctednode);
 
-
                             XmlNode pathnode = ResultDocument.CreateElement("path");
                             pathnode.InnerText = GetXPathToNode(correctedNode) + " " + pathnode.OuterXml;
                             rootNode.AppendChild(pathnode);
