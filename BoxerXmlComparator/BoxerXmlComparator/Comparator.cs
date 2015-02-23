@@ -60,12 +60,12 @@ namespace BoxerXmlComparator
                 CompareSection_taggedtokens(OriginListXDRS[i], CorrectedListXDRS[i], TagTokenNode);
 
                 // Przeszukanie merge w danym xdrs ( w nim jest Domain i Conds)
-                CompareSection_merge(OriginXml, CorrectedXml, TagTokenNode, changeNode);
+                CompareSection_merge(OriginListXDRS[i], CorrectedListXDRS[i], TagTokenNode, changeNode);
             }
 
         }
 
-        private void CompareSection_merge(XmlDocument OriginXml, XmlDocument CorrectedXml, XmlNode TagTokenNode, XmlNode changeNode)
+        private void CompareSection_merge(XmlNode OriginXml, XmlNode CorrectedXml, XmlNode TagTokenNode, XmlNode changeNode)
         {
             CompareSection_domain(OriginXml, CorrectedXml, TagTokenNode, changeNode);
             CompareSection_conds(OriginXml, CorrectedXml, TagTokenNode, changeNode);
@@ -193,13 +193,13 @@ namespace BoxerXmlComparator
 
         }
 
-        private void CompareSection_domain(XmlDocument OriginXml, XmlDocument CorrectedXml, XmlNode TagTokenNode, XmlNode changeNode)
+        private void CompareSection_domain(XmlNode OriginXml, XmlNode CorrectedXml, XmlNode TagTokenNode, XmlNode changeNode)
         {
             XmlNode DomainNode = ResultDocument.CreateElement("Domain");
             changeNode.AppendChild(DomainNode);
 
-            XmlNodeList OriginListDRS = OriginXml.SelectNodes("//merge/drs/domain");
-            XmlNodeList CorrectedListDRS = CorrectedXml.SelectNodes("//merge/drs/domain");
+            XmlNodeList OriginListDRS = OriginXml.SelectNodes("merge/drs/domain");
+            XmlNodeList CorrectedListDRS = CorrectedXml.SelectNodes("merge/drs/domain");
             int error_added = 0, error_removed = 0, error_changed = 0;
 
             // Zmienne dla obliczania procentu błędu
@@ -312,13 +312,13 @@ namespace BoxerXmlComparator
             DomainNode.AppendChild(AppendResultNode(error_added_count, error_removed_count, error_changed_count, all_nodes));
         }
 
-        private void CompareSection_conds(XmlDocument OriginXml, XmlDocument CorrectedXml, XmlNode TagTokenNode, XmlNode changeNode)
+        private void CompareSection_conds(XmlNode OriginXml, XmlNode CorrectedXml, XmlNode TagTokenNode, XmlNode changeNode)
         {
             XmlNode CondsNode = ResultDocument.CreateElement("Conds");
             changeNode.AppendChild(CondsNode);
 
-            XmlNodeList OriginListCONDS = OriginXml.SelectNodes("//merge/drs/conds");
-            XmlNodeList CorrectedListCONDS = CorrectedXml.SelectNodes("//merge/drs/conds");
+            XmlNodeList OriginListCONDS = OriginXml.SelectNodes("merge/drs/conds");
+            XmlNodeList CorrectedListCONDS = CorrectedXml.SelectNodes("merge/drs/conds");
             int error_added = 0, error_removed = 0, error_changed = 0;
 
             // Zmienne dla obliczania procentu błędu
