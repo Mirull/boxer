@@ -14,7 +14,7 @@ namespace BoxerXmlComparator
 {
     public partial class Form1 : Form
     {
-        public XmlDocument CorrectedXml, OriginXml,ResultXml;
+        public XmlDocument CorrectedXml, OriginXml, ResultXml;
 
         public Form1()
         {
@@ -46,13 +46,13 @@ namespace BoxerXmlComparator
                 return xml1;
             }
             else
-                return null;            
+                return null;
         }
 
         private void SaveXmlDocument()
         {
-            XmlDocument saveDocument = new XmlDocument();
-            saveDocument.Load("test-doc.xml");
+            XmlDocument saveDocument = this.ResultXml;
+            //saveDocument.Load("test-doc.xml");
 
             saveFileDialog1.Filter = "xml files (*.xml)|*.xml";
             saveFileDialog1.FilterIndex = 0;
